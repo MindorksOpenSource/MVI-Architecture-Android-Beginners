@@ -1,0 +1,2 @@
+rootProject.name='MVI-Architecture-Android-Beginners'
+include ':app'
