@@ -1,7 +1,8 @@
-package com.mindorks.mvi
+package com.mindorks.framework.mvi
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.mindorks.framework.mvi.R
 
 class MainActivity : AppCompatActivity() {
 
