@@ -1,4 +1,4 @@
-package com.mindorks.mvi_beginner
+package com.mindorks.mvi
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
