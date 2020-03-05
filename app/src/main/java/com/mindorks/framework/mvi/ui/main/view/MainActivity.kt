@@ -1,29 +1,27 @@
 package com.mindorks.framework.mvi.ui.main.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mindorks.framework.mvi.R
-import com.mindorks.framework.mvi.base.ViewModelFactory
 import com.mindorks.framework.mvi.data.api.ApiHelper
-import com.mindorks.framework.mvi.data.api.RetrofitBuilder
+import com.mindorks.framework.mvi.data.api.ApiServiceImpl
+import com.mindorks.framework.mvi.ui.base.ViewModelFactory
 import com.mindorks.framework.mvi.ui.main.adapter.MainAdapter
 import com.mindorks.framework.mvi.ui.main.dataholder.MainDataHolder
 import com.mindorks.framework.mvi.ui.main.viewevent.MainEvents
 import com.mindorks.framework.mvi.ui.main.viewmodel.MainViewModel
-import com.mindorks.mvibeginner.util.Status
+import com.mindorks.framework.mvi.util.Status
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mainViewModel: MainViewModel
-    val TAG = "MainActivity"
     private lateinit var adapter: MainAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,13 +54,12 @@ class MainActivity : AppCompatActivity() {
     private fun setupViewModel() {
         mainViewModel = ViewModelProviders.of(
             this,
-            ViewModelFactory(ApiHelper(RetrofitBuilder.apiService))
+            ViewModelFactory(ApiHelper(ApiServiceImpl()))
         ).get(MainViewModel::class.java)
     }
 
     private fun renderList(mainDataHolder: MainDataHolder) {
-        Log.d(TAG,mainDataHolder.toString())
-        mainDataHolder.users?.let { listOfUsers -> adapter.addData(listOfUsers) }
+        mainDataHolder.users.let { listOfUsers -> adapter.addData(listOfUsers) }
         adapter.notifyDataSetChanged()
     }
 
@@ -81,7 +78,7 @@ class MainActivity : AppCompatActivity() {
                 Status.ERROR -> {
                     //Handle Error
                     progressBar.visibility = View.GONE
-                    Toast.makeText(this, "Something Went Wrong", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
                 }
             }
         })

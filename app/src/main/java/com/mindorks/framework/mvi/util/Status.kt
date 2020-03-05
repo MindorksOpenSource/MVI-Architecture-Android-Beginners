@@ -1,8 +1,7 @@
-package com.mindorks.mvibeginner.util
+package com.mindorks.framework.mvi.util
 
 enum class Status {
     SUCCESS,
     ERROR,
-    LOADING,
-    INITIAL
+    LOADING
 }
