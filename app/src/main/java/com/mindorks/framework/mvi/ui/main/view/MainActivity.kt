@@ -14,7 +14,7 @@ import com.mindorks.framework.mvi.data.api.ApiServiceImpl
 import com.mindorks.framework.mvi.ui.base.ViewModelFactory
 import com.mindorks.framework.mvi.ui.main.adapter.MainAdapter
 import com.mindorks.framework.mvi.ui.main.dataholder.MainDataHolder
-import com.mindorks.framework.mvi.ui.main.viewevent.MainEvents
+import com.mindorks.framework.mvi.ui.main.viewevent.MainEvent
 import com.mindorks.framework.mvi.ui.main.viewmodel.MainViewModel
 import com.mindorks.framework.mvi.util.Status
 import kotlinx.android.synthetic.main.activity_main.*
@@ -29,8 +29,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setupUI()
         setupViewModel()
-        setupViewEvents()
         observeViewModel()
+        setupViewEvents()
     }
 
 
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewEvents() {
-        mainViewModel.setEventValue(MainEvents.UsersLoadEvent)
+        mainViewModel.setEventValue(MainEvent.UsersLoadEvent)
 
     }
 

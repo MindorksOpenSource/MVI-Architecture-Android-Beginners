@@ -6,13 +6,13 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.mindorks.framework.mvi.data.repository.MainRepository
 import com.mindorks.framework.mvi.ui.main.dataholder.MainDataHolder
-import com.mindorks.framework.mvi.ui.main.viewevent.MainEvents
+import com.mindorks.framework.mvi.ui.main.viewevent.MainEvent
 import com.mindorks.framework.mvi.util.Resource
 import io.reactivex.disposables.CompositeDisposable
 
 class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
 
-    private val _eventValue: MutableLiveData<MainEvents> = MutableLiveData()
+    private val _eventValue: MutableLiveData<MainEvent> = MutableLiveData()
     private val compositeDisposable = CompositeDisposable()
 
     val dataOutput: LiveData<Resource<MainDataHolder>> = Transformations
@@ -22,15 +22,15 @@ class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
             }
         }
 
-    private fun handleEvent(event: MainEvents): LiveData<Resource<MainDataHolder>> {
+    private fun handleEvent(event: MainEvent): LiveData<Resource<MainDataHolder>> {
         when (event) {
-            is MainEvents.UsersLoadEvent -> {
+            is MainEvent.UsersLoadEvent -> {
                 return mainRepository.getUsers(compositeDisposable)
             }
         }
     }
 
-    fun setEventValue(event: MainEvents) {
+    fun setEventValue(event: MainEvent) {
         _eventValue.postValue(event)
     }
 
