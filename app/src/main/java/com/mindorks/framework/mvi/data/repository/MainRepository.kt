@@ -20,7 +20,7 @@ class MainRepository(private val apiHelper: ApiHelper) {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ userList ->
                     userLiveData.postValue(Resource.success(MainDataHolder(userList)))
-                }, { throwable ->
+                }, {
                     userLiveData.postValue(Resource.error("Something Went Wrong", null))
                 })
         )

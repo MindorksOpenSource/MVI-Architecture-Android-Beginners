@@ -27,10 +27,12 @@ class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
             is MainEvent.UsersLoadEvent -> {
                 return mainRepository.getUsers(compositeDisposable)
             }
+            //handle other events here
         }
     }
 
-    fun setEventValue(event: MainEvent) {
+    fun setEventValue(e: MainEvent) {
+        val event: MainEvent = e
         _eventValue.postValue(event)
     }
 
