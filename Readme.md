@@ -46,5 +46,5 @@ This repository contains a sample app that implements MVI architecture using Kot
    limitations under the License.
 ```
 
-### Contributing to Android MVVM Architecture
+### Contributing to Android MVI Architecture
 Just make pull request. You are in!
