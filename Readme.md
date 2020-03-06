@@ -7,11 +7,6 @@ This repository contains a sample app that implements MVI architecture using Kot
   <img src="https://github.com/MindorksOpenSource/MVI-Architecture-Android-Beginners/blob/master/art/banner-mvi-arch-beginners.png">
 </p>
 <br>
-<p align="center">
-  <img src="https://github.com/MindorksOpenSource/MVI-Architecture-Android-Beginners/blob/master/art/mvi-banner-display.png">
-</p>
-<br>
-<br>
 
 ### Concept reference resources - [MVI Architecture - Android Tutorial for Beginners - Step by Step Guide](https://blog.mindorks.com/mvi-architecture-android-tutorial-for-beginners-step-by-step-guide)
 
