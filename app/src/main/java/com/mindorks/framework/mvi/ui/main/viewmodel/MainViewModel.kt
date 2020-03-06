@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.mindorks.framework.mvi.data.model.User
 import com.mindorks.framework.mvi.data.repository.MainRepository
 import com.mindorks.framework.mvi.ui.main.dataholder.MainDataHolder
 import com.mindorks.framework.mvi.ui.main.viewevent.MainEvent
@@ -14,8 +15,11 @@ class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
 
     private val _eventValue: MutableLiveData<MainEvent> = MutableLiveData()
     private val compositeDisposable = CompositeDisposable()
+    val viewData: MutableLiveData<MainDataHolder> = MutableLiveData()
+    val loadingValue: MutableLiveData<Boolean> = MutableLiveData()
 
-    val dataOutput: LiveData<Resource<MainDataHolder>> = Transformations
+
+    val dataValue: LiveData<Resource<MainDataHolder>> = Transformations
         .switchMap(_eventValue) { eventValue ->
             eventValue?.let {
                 handleEvent(it)
@@ -27,8 +31,19 @@ class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
             is MainEvent.UsersLoadEvent -> {
                 return mainRepository.getUsers(compositeDisposable)
             }
+
             //handle other events here
         }
+    }
+
+    fun loadUser(users: List<User>) {
+        val state = MainDataHolder()
+        state.users = users
+        viewData.postValue(state)
+    }
+
+    fun loadingValue(value: Boolean) {
+        loadingValue.postValue(value)
     }
 
     fun setEventValue(e: MainEvent) {

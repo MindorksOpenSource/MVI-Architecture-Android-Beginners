@@ -58,30 +58,36 @@ class MainActivity : AppCompatActivity() {
         ).get(MainViewModel::class.java)
     }
 
-    private fun renderList(mainDataHolder: MainDataHolder) {
-        mainDataHolder.users.let { listOfUsers -> adapter.addData(listOfUsers) }
-        adapter.notifyDataSetChanged()
-    }
-
     private fun observeViewModel() {
-        mainViewModel.dataOutput.observe(this, Observer {
-            when (it.status) {
+        mainViewModel.dataValue.observe(this, Observer { result ->
+            when (result.status) {
                 Status.SUCCESS -> {
-                    progressBar.visibility = View.GONE
-                    it.data?.let { users -> renderList(users) }
-                    recyclerView.visibility = View.VISIBLE
+                    mainViewModel.loadingValue(false)
+                    result.data?.users.let {
+                        it?.let { users -> mainViewModel.loadUser(users) }
+                    }
                 }
                 Status.LOADING -> {
+                    mainViewModel.loadingValue(true)
                     progressBar.visibility = View.VISIBLE
-                    recyclerView.visibility = View.GONE
                 }
                 Status.ERROR -> {
-                    //Handle Error
                     progressBar.visibility = View.GONE
-                    Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                    mainViewModel.loadingValue(false)
+                    Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
                 }
             }
         })
+        mainViewModel.viewData.observe(this, Observer { it ->
+            it.users.let { users ->
+                recyclerView.visibility = View.VISIBLE
+                users.let { listOfUsers -> listOfUsers?.let { adapter.addData(it) } }
+                adapter.notifyDataSetChanged()
+            }
+        })
+        mainViewModel.loadingValue.observe(this, Observer { value ->
+            if (value) progressBar.visibility = View.VISIBLE
+            else progressBar.visibility = View.GONE
+        })
     }
-
 }
