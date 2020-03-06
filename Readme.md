@@ -4,11 +4,11 @@
 
 This repository contains a sample app that implements MVI architecture using Kotlin, ViewModel, LiveData, and etc.
 <p align="center">
-  <img src="https://raw.githubusercontent.com/MindorksOpenSource/MVI-Architecture-Android-Beginners/blob/master/art/banner-mvi-arch-beginners.png">
+  <img src="https://github.com/MindorksOpenSource/MVI-Architecture-Android-Beginners/blob/master/art/banner-mvi-arch-beginners.png">
 </p>
 <br>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/MindorksOpenSource/MVI-Architecture-Android-Beginners/blob/master/art/mvi-banner-display.png">
+  <img src="https://github.com/MindorksOpenSource/MVI-Architecture-Android-Beginners/blob/master/art/mvi-banner-display.png">
 </p>
 <br>
 <br>
