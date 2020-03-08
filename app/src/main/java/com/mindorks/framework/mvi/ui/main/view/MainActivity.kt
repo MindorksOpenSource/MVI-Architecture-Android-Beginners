@@ -1,6 +1,7 @@
 package com.mindorks.framework.mvi.ui.main.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -62,18 +63,16 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.dataValueState.observe(this, Observer { result ->
             when (result.status) {
                 Status.SUCCESS -> {
-                    mainViewModel.loadingValue(false)
+                    progressBar.visibility = View.GONE
                     result.data?.users.let {
                         it?.let { users -> mainViewModel.loadUser(users) }
                     }
                 }
                 Status.LOADING -> {
-                    mainViewModel.loadingValue(true)
                     progressBar.visibility = View.VISIBLE
                 }
                 Status.ERROR -> {
                     progressBar.visibility = View.GONE
-                    mainViewModel.loadingValue(false)
                     Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
                 }
             }
@@ -85,9 +84,6 @@ class MainActivity : AppCompatActivity() {
                 adapter.notifyDataSetChanged()
             }
         })
-        mainViewModel.loadingValue.observe(this, Observer { value ->
-            if (value) progressBar.visibility = View.VISIBLE
-            else progressBar.visibility = View.GONE
-        })
+
     }
 }

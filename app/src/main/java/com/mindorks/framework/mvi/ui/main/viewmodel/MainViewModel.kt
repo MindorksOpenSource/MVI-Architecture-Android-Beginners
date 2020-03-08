@@ -14,10 +14,8 @@ import io.reactivex.disposables.CompositeDisposable
 class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
 
     private val eventValue: MutableLiveData<MainEvent> = MutableLiveData()
-    private val compositeDisposable = CompositeDisposable()
     val viewState: MutableLiveData<MainDataHolder> = MutableLiveData()
-    val loadingValue: MutableLiveData<Boolean> = MutableLiveData()
-
+    private val compositeDisposable = CompositeDisposable()
 
     val dataValueState: LiveData<Resource<MainDataHolder>> = Transformations
         .switchMap(eventValue) { eventValue ->
@@ -40,10 +38,6 @@ class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
         val state = MainDataHolder()
         state.users = users
         viewState.postValue(state)
-    }
-
-    fun loadingValue(value: Boolean) {
-        loadingValue.postValue(value)
     }
 
     fun setEventValue(e: MainEvent) {
