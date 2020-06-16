@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
         buttonFetchUser.setOnClickListener {
             lifecycleScope.launch {
                 mainViewModel.userIntent.send(MainIntent.FetchUser)
-                mainViewModel.handleClick()
             }
         }
     }
@@ -70,7 +69,6 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         ).get(MainViewModel::class.java)
-
     }
 
     private fun observeViewModel() {

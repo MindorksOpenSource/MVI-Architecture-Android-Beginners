@@ -23,11 +23,16 @@ class MainViewModel(
     val state: StateFlow<MainState>
         get() = _state
 
+    init {
+        handleIntent()
+    }
 
-    suspend fun handleClick() {
-        userIntent.consumeAsFlow().collect {
-            when (it) {
-                is MainIntent.FetchUser -> fetchUser()
+    private fun handleIntent() {
+        viewModelScope.launch {
+            userIntent.consumeAsFlow().collect {
+                when (it) {
+                    is MainIntent.FetchUser -> fetchUser()
+                }
             }
         }
     }
