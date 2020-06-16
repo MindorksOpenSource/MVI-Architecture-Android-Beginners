@@ -33,7 +33,13 @@ class MainActivity : AppCompatActivity() {
         setupUI()
         setupViewModel()
         observeViewModel()
-        setupViewEvents()
+        setupClicks()
+    }
+
+    private fun setupClicks() {
+        buttonFetchUser.setOnClickListener {
+
+        }
     }
 
 
@@ -50,9 +56,6 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
     }
 
-    private fun setupViewEvents() {
-
-    }
 
     private fun setupViewModel() {
         mainViewModel = ViewModelProviders.of(
@@ -69,7 +72,8 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             mainViewModel.state.collect {
                 when (it) {
-                    is MainState.Idle -> {}
+                    is MainState.Idle -> {
+                    }
 
                     is MainState.Loading -> progressBar.visibility = View.VISIBLE
 
