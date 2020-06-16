@@ -1,7 +1,7 @@
 package com.mindorks.framework.mvi.data.api
 
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 object RetrofitBuilder {
 
@@ -9,7 +9,7 @@ object RetrofitBuilder {
 
     private fun getRetrofit() = Retrofit.Builder()
         .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(MoshiConverterFactory.create())
         .build()
 
 

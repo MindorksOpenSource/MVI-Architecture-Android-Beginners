@@ -1,14 +1,14 @@
 package com.mindorks.framework.mvi.data.model
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class User(
-    @SerializedName("id")
+    @Json(name = "id")
     val id: Int = 0,
-    @SerializedName("name")
+    @Json(name = "name")
     val name: String = "",
-    @SerializedName("email")
+    @Json(name = "email")
     val email: String = "",
-    @SerializedName("avatar")
+    @Json(name = "avatar")
     val avatar: String = ""
 )
