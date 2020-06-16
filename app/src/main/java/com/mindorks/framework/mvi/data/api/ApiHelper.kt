@@ -1,7 +1,9 @@
 package com.mindorks.framework.mvi.data.api
 
-class ApiHelper(private val apiService: ApiService) {
+import com.mindorks.framework.mvi.data.model.User
 
-    fun getUsers() = apiService.getUsers()
+interface ApiHelper {
+
+    suspend fun getUsers(): List<User>
 
 }
