@@ -18,7 +18,6 @@ class MainViewModel(
     val state: StateFlow<State>
         get() = _state
 
-
     init {
         fetchUser()
     }
