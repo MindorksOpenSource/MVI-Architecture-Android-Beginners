@@ -3,7 +3,7 @@ package com.mindorks.framework.mvi.ui.main.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindorks.framework.mvi.data.repository.MainRepository
-import com.mindorks.framework.mvi.ui.main.viewstate.State
+import com.mindorks.framework.mvi.ui.main.viewstate.MainState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,8 +14,8 @@ class MainViewModel(
     private val repository: MainRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<State>(State.Idle)
-    val state: StateFlow<State>
+    private val _state = MutableStateFlow<MainState>(MainState.Idle)
+    val state: StateFlow<MainState>
         get() = _state
 
     init {
@@ -24,11 +24,11 @@ class MainViewModel(
 
     private fun fetchUser() {
         viewModelScope.launch {
-            _state.value = State.Loading
+            _state.value = MainState.Loading
             _state.value = try {
-                State.Users(repository.getUsers())
+                MainState.Users(repository.getUsers())
             } catch (e: Exception) {
-                State.Error(e.localizedMessage)
+                MainState.Error(e.localizedMessage)
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.mindorks.framework.mvi.ui.main.view
 
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
@@ -15,9 +15,7 @@ import com.mindorks.framework.mvi.data.model.User
 import com.mindorks.framework.mvi.util.ViewModelFactory
 import com.mindorks.framework.mvi.ui.main.adapter.MainAdapter
 import com.mindorks.framework.mvi.ui.main.viewmodel.MainViewModel
-import com.mindorks.framework.mvi.ui.main.viewstate.State
-import com.mindorks.framework.mvi.util.hide
-import com.mindorks.framework.mvi.util.show
+import com.mindorks.framework.mvi.ui.main.viewstate.MainState
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -71,17 +69,16 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             mainViewModel.state.collect {
                 when (it) {
-                    is State.Idle -> {}
+                    is MainState.Idle -> {}
 
-                    is State.Loading -> progressBar.show()
+                    is MainState.Loading -> progressBar.visibility = View.VISIBLE
 
-                    is State.Users -> {
-                        progressBar.hide()
+                    is MainState.Users -> {
+                        progressBar.visibility = View.GONE
                         renderList(it.user)
                     }
-                    is State.Error -> {
-                        Log.d("SDfsf",it.error)
-                        progressBar.hide()
+                    is MainState.Error -> {
+                        progressBar.visibility = View.GONE
                         Toast.makeText(this@MainActivity, it.error, Toast.LENGTH_LONG).show()
                     }
                 }
@@ -90,7 +87,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun renderList(users: List<User>) {
-        recyclerView.show()
+        recyclerView.visibility = View.VISIBLE
         users.let { listOfUsers -> listOfUsers.let { adapter.addData(it) } }
         adapter.notifyDataSetChanged()
     }
