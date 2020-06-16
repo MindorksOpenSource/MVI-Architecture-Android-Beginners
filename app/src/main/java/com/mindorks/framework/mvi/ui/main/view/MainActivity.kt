@@ -1,6 +1,7 @@
 package com.mindorks.framework.mvi.ui.main.view
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
@@ -11,7 +12,7 @@ import com.mindorks.framework.mvi.R
 import com.mindorks.framework.mvi.data.api.ApiHelperImpl
 import com.mindorks.framework.mvi.data.api.RetrofitBuilder
 import com.mindorks.framework.mvi.data.model.User
-import com.mindorks.framework.mvi.ui.base.ViewModelFactory
+import com.mindorks.framework.mvi.util.ViewModelFactory
 import com.mindorks.framework.mvi.ui.main.adapter.MainAdapter
 import com.mindorks.framework.mvi.ui.main.viewmodel.MainViewModel
 import com.mindorks.framework.mvi.ui.main.viewstate.State
@@ -58,7 +59,11 @@ class MainActivity : AppCompatActivity() {
     private fun setupViewModel() {
         mainViewModel = ViewModelProviders.of(
             this,
-            ViewModelFactory(ApiHelperImpl(RetrofitBuilder.apiService))
+            ViewModelFactory(
+                ApiHelperImpl(
+                    RetrofitBuilder.apiService
+                )
+            )
         ).get(MainViewModel::class.java)
     }
 
@@ -66,8 +71,8 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             mainViewModel.state.collect {
                 when (it) {
-                    is State.Idle -> {
-                    }
+                    is State.Idle -> {}
+
                     is State.Loading -> progressBar.show()
 
                     is State.Users -> {
@@ -75,6 +80,7 @@ class MainActivity : AppCompatActivity() {
                         renderList(it.user)
                     }
                     is State.Error -> {
+                        Log.d("SDfsf",it.error)
                         progressBar.hide()
                         Toast.makeText(this@MainActivity, it.error, Toast.LENGTH_LONG).show()
                     }

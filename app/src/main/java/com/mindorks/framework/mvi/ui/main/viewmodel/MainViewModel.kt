@@ -10,13 +10,19 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-class MainViewModel(private val repository: MainRepository) : ViewModel() {
+class MainViewModel(
+    private val repository: MainRepository
+) : ViewModel() {
 
     private val _state = MutableStateFlow<State>(State.Idle)
     val state: StateFlow<State>
         get() = _state
 
     init {
+        fetchUser()
+    }
+
+    private fun fetchUser() {
         viewModelScope.launch {
             _state.value = State.Loading
             _state.value = try {
@@ -26,5 +32,4 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
             }
         }
     }
-
 }

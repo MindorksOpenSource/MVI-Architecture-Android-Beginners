@@ -1,4 +1,4 @@
-package com.mindorks.framework.mvi.ui.base
+package com.mindorks.framework.mvi.util
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
