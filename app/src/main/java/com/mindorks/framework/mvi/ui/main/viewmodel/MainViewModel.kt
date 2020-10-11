@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.mindorks.framework.mvi.data.repository.MainRepository
 import com.mindorks.framework.mvi.ui.main.intent.MainIntent
 import com.mindorks.framework.mvi.ui.main.viewstate.MainState
+import com.mindorks.framework.mvi.util.ContextProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,8 @@ import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 class MainViewModel(
-    private val repository: MainRepository
+    private val repository: MainRepository,
+    private val contextProvider: ContextProvider
 ) : ViewModel() {
 
     val userIntent = Channel<MainIntent>(Channel.UNLIMITED)
@@ -28,7 +30,8 @@ class MainViewModel(
     }
 
     private fun handleIntent() {
-        viewModelScope.launch {
+        viewModelScope.launch(contextProvider.io) {
+            userIntent.send(MainIntent.FetchUser)
             userIntent.consumeAsFlow().collect {
                 when (it) {
                     is MainIntent.FetchUser -> fetchUser()
@@ -38,7 +41,7 @@ class MainViewModel(
     }
 
     private fun fetchUser() {
-        viewModelScope.launch {
+        viewModelScope.launch(contextProvider.io) {
             _state.value = MainState.Loading
             _state.value = try {
                 MainState.Users(repository.getUsers())

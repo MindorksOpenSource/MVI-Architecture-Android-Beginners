@@ -3,27 +3,29 @@ package com.mindorks.framework.mvi.ui.main.view
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mindorks.framework.mvi.R
-import com.mindorks.framework.mvi.data.api.ApiHelperImpl
-import com.mindorks.framework.mvi.data.api.RetrofitBuilder
 import com.mindorks.framework.mvi.data.model.User
-import com.mindorks.framework.mvi.util.ViewModelFactory
 import com.mindorks.framework.mvi.ui.main.adapter.MainAdapter
 import com.mindorks.framework.mvi.ui.main.intent.MainIntent
 import com.mindorks.framework.mvi.ui.main.viewmodel.MainViewModel
 import com.mindorks.framework.mvi.ui.main.viewstate.MainState
+import com.mindorks.framework.mvi.util.ViewModelFactory
+import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
+
+    @Inject
+    lateinit var factory: ViewModelFactory
 
     private lateinit var mainViewModel: MainViewModel
     private var adapter = MainAdapter(arrayListOf())
@@ -61,14 +63,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun setupViewModel() {
-        mainViewModel = ViewModelProviders.of(
-            this,
-            ViewModelFactory(
-                ApiHelperImpl(
-                    RetrofitBuilder.apiService
-                )
-            )
-        ).get(MainViewModel::class.java)
+        mainViewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
     }
 
     private fun observeViewModel() {
