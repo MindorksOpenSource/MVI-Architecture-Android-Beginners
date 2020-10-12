@@ -16,9 +16,10 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
+import org.mockito.ArgumentCaptor
+import org.mockito.Captor
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
@@ -37,6 +38,9 @@ class MainViewModelTest {
     @Mock
     private lateinit var observer: Observer<MainState>
 
+    @Captor
+    private lateinit var captor: ArgumentCaptor<MainState>
+
     @Test
     fun givenServerResponse200_whenFetch_shouldReturnSuccess() {
         runBlockingTest {
@@ -47,6 +51,7 @@ class MainViewModelTest {
             viewModel.state.asLiveData().observeForever(observer)
             viewModel.userIntent.send(MainIntent.FetchUser)
         }
+        verify(observer, times(3)).onChanged(captor.capture())
         verify(observer).onChanged(MainState.Idle)
         verify(observer).onChanged(MainState.Loading)
         verify(observer).onChanged(MainState.Users(emptyList()))
@@ -62,8 +67,10 @@ class MainViewModelTest {
             viewModel.state.asLiveData().observeForever(observer)
             viewModel.userIntent.send(MainIntent.FetchUser)
         }
+        verify(observer, times(3)).onChanged(captor.capture())
         verify(observer).onChanged(MainState.Idle)
         verify(observer).onChanged(MainState.Loading)
         verify(observer).onChanged(MainState.Error(null))
+
     }
 }
