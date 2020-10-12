@@ -6,6 +6,7 @@ import androidx.lifecycle.asLiveData
 import com.mindorks.framework.mvi.data.api.ApiHelperImpl
 import com.mindorks.framework.mvi.data.api.ApiService
 import com.mindorks.framework.mvi.data.repository.MainRepository
+import com.mindorks.framework.mvi.ui.main.intent.MainIntent
 import com.mindorks.framework.mvi.ui.main.viewmodel.MainViewModel
 import com.mindorks.framework.mvi.ui.main.viewstate.MainState
 import com.mindorks.framework.mvi.util.TestContextProvider
@@ -40,11 +41,14 @@ class MainViewModelTest {
     fun givenServerResponse200_whenFetch_shouldReturnSuccess() {
         runBlockingTest {
             `when`(apiService.getUsers()).thenReturn(emptyList())
+            val apiHelper = ApiHelperImpl(apiService)
+            val repository = MainRepository(apiHelper)
+            val viewModel = MainViewModel(repository, TestContextProvider())
+            viewModel.state.asLiveData().observeForever(observer)
+            viewModel.userIntent.send(MainIntent.FetchUser)
         }
-        val apiHelper = ApiHelperImpl(apiService)
-        val repository = MainRepository(apiHelper)
-        val viewModel = MainViewModel(repository, TestContextProvider())
-        viewModel.state.asLiveData().observeForever(observer)
+        verify(observer).onChanged(MainState.Idle)
+        verify(observer).onChanged(MainState.Loading)
         verify(observer).onChanged(MainState.Users(emptyList()))
     }
 
@@ -52,11 +56,14 @@ class MainViewModelTest {
     fun givenServerResponseError_whenFetch_shouldReturnError() {
         runBlockingTest {
             `when`(apiService.getUsers()).thenThrow(RuntimeException())
+            val apiHelper = ApiHelperImpl(apiService)
+            val repository = MainRepository(apiHelper)
+            val viewModel = MainViewModel(repository, TestContextProvider())
+            viewModel.state.asLiveData().observeForever(observer)
+            viewModel.userIntent.send(MainIntent.FetchUser)
         }
-        val apiHelper = ApiHelperImpl(apiService)
-        val repository = MainRepository(apiHelper)
-        val viewModel = MainViewModel(repository, TestContextProvider())
-        viewModel.state.asLiveData().observeForever(observer)
+        verify(observer).onChanged(MainState.Idle)
+        verify(observer).onChanged(MainState.Loading)
         verify(observer).onChanged(MainState.Error(null))
     }
 }

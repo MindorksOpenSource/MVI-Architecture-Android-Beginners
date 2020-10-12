@@ -31,7 +31,6 @@ class MainViewModel(
 
     private fun handleIntent() {
         viewModelScope.launch(contextProvider.io) {
-            userIntent.send(MainIntent.FetchUser)
             userIntent.consumeAsFlow().collect {
                 when (it) {
                     is MainIntent.FetchUser -> fetchUser()
