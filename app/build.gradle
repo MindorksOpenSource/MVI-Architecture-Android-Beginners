@@ -66,9 +66,6 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$version_dagger"
     kapt "com.google.dagger:dagger-android-processor:$version_dagger"
 
-    //Junit
-    testImplementation "junit:junit:$version_junit"
-
     // Testing Architecture components
     testImplementation "androidx.arch.core:core-testing:$version_androidxTest"
 

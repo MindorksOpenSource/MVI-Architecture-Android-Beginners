@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.mindorks.framework.mvi
+package com.mindorks.framework.mvi.util
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

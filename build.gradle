@@ -6,7 +6,6 @@ buildscript {
         version_dagger = '2.26'
 
         // unit test
-        version_junit = '4.12'
         version_androidxTest = '2.1.0'
         version_mockito = '2.23.0'
     }

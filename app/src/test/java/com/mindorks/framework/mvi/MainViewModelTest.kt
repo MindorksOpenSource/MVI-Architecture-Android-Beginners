@@ -9,6 +9,7 @@ import com.mindorks.framework.mvi.data.repository.MainRepository
 import com.mindorks.framework.mvi.ui.main.intent.MainIntent
 import com.mindorks.framework.mvi.ui.main.viewmodel.MainViewModel
 import com.mindorks.framework.mvi.ui.main.viewstate.MainState
+import com.mindorks.framework.mvi.util.MainCoroutineScopeRule
 import com.mindorks.framework.mvi.util.TestContextProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
