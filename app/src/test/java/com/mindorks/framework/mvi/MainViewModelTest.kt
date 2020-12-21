@@ -10,7 +10,6 @@ import com.mindorks.framework.mvi.ui.main.intent.MainIntent
 import com.mindorks.framework.mvi.ui.main.viewmodel.MainViewModel
 import com.mindorks.framework.mvi.ui.main.viewstate.MainState
 import com.mindorks.framework.mvi.util.MainCoroutineScopeRule
-import com.mindorks.framework.mvi.util.TestContextProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
@@ -48,7 +47,7 @@ class MainViewModelTest {
             `when`(apiService.getUsers()).thenReturn(emptyList())
             val apiHelper = ApiHelperImpl(apiService)
             val repository = MainRepository(apiHelper)
-            val viewModel = MainViewModel(repository, TestContextProvider())
+            val viewModel = MainViewModel(repository)
             viewModel.state.asLiveData().observeForever(observer)
             viewModel.userIntent.send(MainIntent.FetchUser)
         }
@@ -64,7 +63,7 @@ class MainViewModelTest {
             `when`(apiService.getUsers()).thenThrow(RuntimeException())
             val apiHelper = ApiHelperImpl(apiService)
             val repository = MainRepository(apiHelper)
-            val viewModel = MainViewModel(repository, TestContextProvider())
+            val viewModel = MainViewModel(repository)
             viewModel.state.asLiveData().observeForever(observer)
             viewModel.userIntent.send(MainIntent.FetchUser)
         }
@@ -72,6 +71,5 @@ class MainViewModelTest {
         verify(observer).onChanged(MainState.Idle)
         verify(observer).onChanged(MainState.Loading)
         verify(observer).onChanged(MainState.Error(null))
-
     }
 }
