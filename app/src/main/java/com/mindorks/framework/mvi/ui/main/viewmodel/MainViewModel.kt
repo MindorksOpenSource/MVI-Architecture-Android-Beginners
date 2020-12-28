@@ -37,14 +37,12 @@ class MainViewModel(
         }
     }
 
-    private fun fetchUser() {
-        viewModelScope.launch {
-            _state.value = MainState.Loading
-            _state.value = try {
-                MainState.Users(repository.getUsers())
-            } catch (e: Exception) {
-                MainState.Error(e.localizedMessage)
-            }
+    private suspend fun fetchUser() {
+        _state.value = MainState.Loading
+        _state.value = try {
+            MainState.Users(repository.getUsers())
+        } catch (e: Exception) {
+            MainState.Error(e.localizedMessage)
         }
     }
 }
