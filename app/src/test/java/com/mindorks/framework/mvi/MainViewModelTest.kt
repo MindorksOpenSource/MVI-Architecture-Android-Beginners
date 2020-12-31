@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import com.mindorks.framework.mvi.data.api.ApiHelperImpl
 import com.mindorks.framework.mvi.data.api.ApiService
+import com.mindorks.framework.mvi.data.model.User
 import com.mindorks.framework.mvi.data.repository.MainRepository
 import com.mindorks.framework.mvi.ui.main.intent.MainIntent
 import com.mindorks.framework.mvi.ui.main.viewmodel.MainViewModel
@@ -36,10 +37,10 @@ class MainViewModelTest {
     lateinit var apiService: ApiService
 
     @Mock
-    private lateinit var observer: Observer<MainState>
+    private lateinit var observer: Observer<MainState<List<User>>>
 
     @Captor
-    private lateinit var captor: ArgumentCaptor<MainState>
+    private lateinit var captor: ArgumentCaptor<MainState<List<User>>>
 
     @Test
     fun givenServerResponse200_whenFetch_shouldReturnSuccess() {
@@ -54,7 +55,7 @@ class MainViewModelTest {
         verify(observer, times(3)).onChanged(captor.capture())
         verify(observer).onChanged(MainState.Idle)
         verify(observer).onChanged(MainState.Loading)
-        verify(observer).onChanged(MainState.Users(emptyList()))
+        verify(observer).onChanged(MainState.Success(emptyList()))
     }
 
     @Test

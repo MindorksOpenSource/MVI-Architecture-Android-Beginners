@@ -2,6 +2,7 @@ package com.mindorks.framework.mvi.ui.main.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mindorks.framework.mvi.data.model.User
 import com.mindorks.framework.mvi.data.repository.MainRepository
 import com.mindorks.framework.mvi.ui.main.intent.MainIntent
 import com.mindorks.framework.mvi.ui.main.viewstate.MainState
@@ -17,8 +18,8 @@ import kotlinx.coroutines.launch
 class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
     val userIntent = Channel<MainIntent>(Channel.UNLIMITED)
-    private val _state = MutableStateFlow<MainState>(MainState.Idle)
-    val state: StateFlow<MainState>
+    private val _state = MutableStateFlow<MainState<List<User>>>(MainState.Idle)
+    val state: StateFlow<MainState<List<User>>>
         get() = _state
 
     init {
@@ -39,7 +40,7 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
         viewModelScope.launch {
             _state.value = MainState.Loading
             _state.value = try {
-                MainState.Users(repository.getUsers())
+                MainState.Success(repository.getUsers())
             } catch (e: Exception) {
                 MainState.Error(e.localizedMessage)
             }

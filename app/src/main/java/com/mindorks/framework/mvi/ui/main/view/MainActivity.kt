@@ -78,24 +78,24 @@ class MainActivity : DaggerAppCompatActivity() {
                         progressBar.visibility = View.VISIBLE
                     }
 
-                    is MainState.Users -> {
+                    is MainState.Success -> {
                         progressBar.visibility = View.GONE
                         buttonFetchUser.visibility = View.GONE
-                        renderList(it.user)
+                        renderList(it.data)
                     }
                     is MainState.Error -> {
                         progressBar.visibility = View.GONE
                         buttonFetchUser.visibility = View.VISIBLE
-                        Toast.makeText(this@MainActivity, it.error, Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@MainActivity, it.message, Toast.LENGTH_LONG).show()
                     }
                 }
             }
         }
     }
 
-    private fun renderList(users: List<User>) {
+    private fun renderList(users: List<User>?) {
         recyclerView.visibility = View.VISIBLE
-        users.let { listOfUsers -> listOfUsers.let { adapter.addData(it) } }
+        users?.let { listOfUsers -> listOfUsers.let { adapter.addData(it) } }
         adapter.notifyDataSetChanged()
     }
 }
