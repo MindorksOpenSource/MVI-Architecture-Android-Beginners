@@ -17,7 +17,8 @@ import com.mindorks.framework.mvi.util.ViewModelFactory
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,8 +36,9 @@ class MainActivity : DaggerAppCompatActivity() {
         setContentView(R.layout.activity_main)
         setupUI()
         setupViewModel()
-        observeViewModel()
         setupClicks()
+        mainViewModel.state.onEach { state -> handleIntent(state) }
+            .launchIn(lifecycleScope)
     }
 
     private fun setupClicks() {
@@ -46,7 +48,6 @@ class MainActivity : DaggerAppCompatActivity() {
             }
         }
     }
-
 
     private fun setupUI() {
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -66,36 +67,30 @@ class MainActivity : DaggerAppCompatActivity() {
         mainViewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
     }
 
-    private fun observeViewModel() {
-        lifecycleScope.launch {
-            mainViewModel.state.collect {
-                when (it) {
-                    is MainState.Idle -> {
+    private fun handleIntent(state: MainState<List<User>>) {
+        when (state) {
+            is MainState.Idle -> Unit
+            is MainState.Loading -> {
+                buttonFetchUser.visibility = View.GONE
+                progressBar.visibility = View.VISIBLE
+            }
 
-                    }
-                    is MainState.Loading -> {
-                        buttonFetchUser.visibility = View.GONE
-                        progressBar.visibility = View.VISIBLE
-                    }
-
-                    is MainState.Success -> {
-                        progressBar.visibility = View.GONE
-                        buttonFetchUser.visibility = View.GONE
-                        renderList(it.data)
-                    }
-                    is MainState.Error -> {
-                        progressBar.visibility = View.GONE
-                        buttonFetchUser.visibility = View.VISIBLE
-                        Toast.makeText(this@MainActivity, it.message, Toast.LENGTH_LONG).show()
-                    }
-                }
+            is MainState.Success -> {
+                progressBar.visibility = View.GONE
+                buttonFetchUser.visibility = View.GONE
+                renderList(state.data)
+            }
+            is MainState.Error -> {
+                progressBar.visibility = View.GONE
+                buttonFetchUser.visibility = View.VISIBLE
+                Toast.makeText(this@MainActivity, state.message, Toast.LENGTH_LONG).show()
             }
         }
     }
 
     private fun renderList(users: List<User>?) {
         recyclerView.visibility = View.VISIBLE
-        users?.let { listOfUsers -> listOfUsers.let { adapter.addData(it) } }
+        users?.let { adapter.addData(it) }
         adapter.notifyDataSetChanged()
     }
 }

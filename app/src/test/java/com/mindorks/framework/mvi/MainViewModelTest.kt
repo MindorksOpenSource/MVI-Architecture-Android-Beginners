@@ -7,7 +7,6 @@ import com.mindorks.framework.mvi.data.api.ApiHelperImpl
 import com.mindorks.framework.mvi.data.api.ApiService
 import com.mindorks.framework.mvi.data.model.User
 import com.mindorks.framework.mvi.data.repository.MainRepository
-import com.mindorks.framework.mvi.ui.main.intent.MainIntent
 import com.mindorks.framework.mvi.ui.main.viewmodel.MainViewModel
 import com.mindorks.framework.mvi.ui.main.viewstate.MainState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -45,31 +44,39 @@ class MainViewModelTest {
     fun givenServerResponse200_whenFetch_shouldReturnSuccess() {
         runBlockingTest {
             `when`(apiService.getUsers()).thenReturn(emptyList())
-            val apiHelper = ApiHelperImpl(apiService)
-            val repository = MainRepository(apiHelper)
-            val viewModel = MainViewModel(repository)
-            viewModel.state.asLiveData().observeForever(observer)
-            viewModel.userIntent.send(MainIntent.FetchUser)
         }
-        verify(observer, times(3)).onChanged(captor.capture())
-        verify(observer).onChanged(MainState.Idle)
-        verify(observer).onChanged(MainState.Loading)
-        verify(observer).onChanged(MainState.Success(emptyList()))
+        val apiHelper = ApiHelperImpl(apiService)
+        val repository = MainRepository(apiHelper).apply {
+            state.asLiveData().observeForever(observer)
+        }
+        val viewModel = MainViewModel(repository)
+        try {
+            verify(observer, times(3)).onChanged(captor.capture())
+            verify(observer).onChanged(MainState.Idle)
+            verify(observer).onChanged(MainState.Loading)
+            verify(observer).onChanged(MainState.Success(emptyList()))
+        } finally {
+            viewModel.state.asLiveData().removeObserver(observer)
+        }
     }
 
     @Test
     fun givenServerResponseError_whenFetch_shouldReturnError() {
         runBlockingTest {
             `when`(apiService.getUsers()).thenThrow(RuntimeException())
-            val apiHelper = ApiHelperImpl(apiService)
-            val repository = MainRepository(apiHelper)
-            val viewModel = MainViewModel(repository)
-            viewModel.state.asLiveData().observeForever(observer)
-            viewModel.userIntent.send(MainIntent.FetchUser)
         }
-        verify(observer, times(3)).onChanged(captor.capture())
-        verify(observer).onChanged(MainState.Idle)
-        verify(observer).onChanged(MainState.Loading)
-        verify(observer).onChanged(MainState.Error(null))
+        val apiHelper = ApiHelperImpl(apiService)
+        val repository = MainRepository(apiHelper).apply {
+            state.asLiveData().observeForever(observer)
+        }
+        val viewModel = MainViewModel(repository)
+        try {
+            verify(observer, times(3)).onChanged(captor.capture())
+            verify(observer).onChanged(MainState.Idle)
+            verify(observer).onChanged(MainState.Loading)
+            verify(observer).onChanged(MainState.Error(null))
+        } finally {
+            viewModel.state.asLiveData().removeObserver(observer)
+        }
     }
 }
