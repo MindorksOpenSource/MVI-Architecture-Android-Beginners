@@ -35,18 +35,10 @@ class MainActivity : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupUI()
-        setupViewModel()
         setupClicks()
+        mainViewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
         mainViewModel.state.onEach { state -> handleIntent(state) }
             .launchIn(lifecycleScope)
-    }
-
-    private fun setupClicks() {
-        buttonFetchUser.setOnClickListener {
-            lifecycleScope.launch {
-                mainViewModel.userIntent.send(MainIntent.FetchUser)
-            }
-        }
     }
 
     private fun setupUI() {
@@ -62,9 +54,12 @@ class MainActivity : DaggerAppCompatActivity() {
         recyclerView.adapter = adapter
     }
 
-
-    private fun setupViewModel() {
-        mainViewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
+    private fun setupClicks() {
+        buttonFetchUser.setOnClickListener {
+            lifecycleScope.launch {
+                mainViewModel.userIntent.send(MainIntent.FetchUser)
+            }
+        }
     }
 
     private fun handleIntent(state: MainState<List<User>>) {
