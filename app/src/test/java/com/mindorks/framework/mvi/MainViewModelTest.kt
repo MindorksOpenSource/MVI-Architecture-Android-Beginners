@@ -56,7 +56,7 @@ class MainViewModelTest {
             verify(observer).onChanged(MainState.Loading)
             verify(observer).onChanged(MainState.Success(emptyList()))
         } finally {
-            viewModel.state.asLiveData().removeObserver(observer)
+            repository.state.asLiveData().removeObserver(observer)
         }
     }
 
@@ -76,7 +76,7 @@ class MainViewModelTest {
             verify(observer).onChanged(MainState.Loading)
             verify(observer).onChanged(MainState.Error(null))
         } finally {
-            viewModel.state.asLiveData().removeObserver(observer)
+            repository.state.asLiveData().removeObserver(observer)
         }
     }
 }
