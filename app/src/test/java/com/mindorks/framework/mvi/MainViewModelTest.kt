@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.mindorks.framework.mvi.data.api.ApiHelperImpl
 import com.mindorks.framework.mvi.data.api.ApiService
 import com.mindorks.framework.mvi.data.model.User
-import com.mindorks.framework.mvi.data.repository.MainRepository
+import com.mindorks.framework.mvi.data.repository.MainRepositoryImpl
 import com.mindorks.framework.mvi.ui.main.viewmodel.MainViewModel
 import com.mindorks.framework.mvi.ui.main.viewstate.MainState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -36,7 +36,7 @@ class MainViewModelTest {
             Mockito.`when`(apiService.getUsers()).thenReturn(emptyList())
         }
         val apiHelper = ApiHelperImpl(apiService)
-        val repository = MainRepository(apiHelper)
+        val repository = MainRepositoryImpl(apiHelper)
         assert(repository.state.value == MainState.Idle)
 
         coroutineScope.pauseDispatcher()
@@ -56,7 +56,7 @@ class MainViewModelTest {
             Mockito.`when`(apiService.getUsers()).thenThrow(RuntimeException())
         }
         val apiHelper = ApiHelperImpl(apiService)
-        val repository = MainRepository(apiHelper)
+        val repository = MainRepositoryImpl(apiHelper)
         assert(repository.state.value == MainState.Idle)
 
         coroutineScope.pauseDispatcher()

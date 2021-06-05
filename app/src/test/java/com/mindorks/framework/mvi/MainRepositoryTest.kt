@@ -6,7 +6,7 @@ import androidx.lifecycle.asLiveData
 import com.mindorks.framework.mvi.data.api.ApiHelperImpl
 import com.mindorks.framework.mvi.data.api.ApiService
 import com.mindorks.framework.mvi.data.model.User
-import com.mindorks.framework.mvi.data.repository.MainRepository
+import com.mindorks.framework.mvi.data.repository.MainRepositoryImpl
 import com.mindorks.framework.mvi.ui.main.viewstate.MainState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -42,7 +42,7 @@ class MainRepositoryTest {
     @Test
     fun givenServerResponse200_whenFetch_shouldReturnSuccess() {
         val apiHelper = ApiHelperImpl(apiService)
-        val repository = MainRepository(apiHelper).apply {
+        val repository = MainRepositoryImpl(apiHelper).apply {
             state.asLiveData().observeForever(observer)
         }
         runBlockingTest {
@@ -62,7 +62,7 @@ class MainRepositoryTest {
     @Test
     fun givenServerResponseError_whenFetch_shouldReturnError() {
         val apiHelper = ApiHelperImpl(apiService)
-        val repository = MainRepository(apiHelper).apply {
+        val repository = MainRepositoryImpl(apiHelper).apply {
             state.asLiveData().observeForever(observer)
         }
         runBlockingTest {
