@@ -7,10 +7,13 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Singleton
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @Singleton
-class MainRepositoryImpl(private val apiHelper: ApiHelper): MainRepository {
+class MainRepositoryImpl @Inject constructor(
+    private val apiHelper: ApiHelper
+) : MainRepository {
 
     private val _state = MutableStateFlow<MainState<List<User>>>(MainState.Idle)
     override val state: StateFlow<MainState<List<User>>>
