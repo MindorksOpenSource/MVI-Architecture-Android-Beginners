@@ -22,16 +22,16 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
         get() = _state
 
     init {
-        handleIntent()
-    }
-
-    private fun handleIntent() {
         viewModelScope.launch {
             userIntent.send(MainIntent.FetchUser)
-            userIntent.consumeAsFlow().collect {
-                when (it) {
-                    is MainIntent.FetchUser -> repository.fetchUser()
-                }
+            handleIntent()
+        }
+    }
+
+    private suspend fun handleIntent() {
+        userIntent.consumeAsFlow().collect {
+            when (it) {
+                is MainIntent.FetchUser -> repository.fetchUser()
             }
         }
     }
