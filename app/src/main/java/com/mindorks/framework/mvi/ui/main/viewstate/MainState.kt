@@ -1,12 +1,8 @@
 package com.mindorks.framework.mvi.ui.main.viewstate
 
-import com.mindorks.framework.mvi.data.model.User
-
-sealed class MainState {
-
-    object Idle : MainState()
-    object Loading : MainState()
-    data class Users(val user: List<User>) : MainState()
-    data class Error(val error: String?) : MainState()
-
+sealed class MainState<out R> {
+    object Idle : MainState<Nothing>()
+    object Loading : MainState<Nothing>()
+    data class Success<out T>(val data: T?) : MainState<T>()
+    data class Error(val message: String?) : MainState<Nothing>()
 }
